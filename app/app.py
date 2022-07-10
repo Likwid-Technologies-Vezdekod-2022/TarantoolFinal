@@ -82,17 +82,6 @@ def create_meme():
     top_text = data.get('top_text')
     bottom_text = data.get('bottom_text')
 
-    errors = []
-    # if (not files.get('img') or not files['img'].filename) and (not top_text and not bottom_text):
-    #     if not top_text or not bottom_text:
-    #         errors.append({'top_text': 'обязательное поле'})
-    #         errors.append({'bottom_text': 'обязательное поле'})
-    #     elif not files.get('img') or not files['img'].filename:
-    #         errors.append({'img': 'обязательное поле'})
-    #
-    # if errors:
-    #     return jsonify(errors), 400
-
     form_img = files.get('img')
 
     # если не передали изображение, то берем случайное
