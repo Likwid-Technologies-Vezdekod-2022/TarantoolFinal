@@ -19,6 +19,12 @@
     img: File (может быть пустым)
     ```
     _Пример запроса_
+    ![image](https://user-images.githubusercontent.com/56492378/178145240-4656300d-5e1d-4114-a1d9-17c0fb0575a2.png)
+    
+    _Ответ_
+    ![image](https://user-images.githubusercontent.com/56492378/178145262-c1ea7850-b368-4679-ab8b-d03d7983353e.png)
+
+
 
 ## Запуск проекта
 
