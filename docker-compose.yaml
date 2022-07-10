@@ -9,7 +9,7 @@ services:
         max-file: "2"
     restart: always
     environment:
-      - 'HOST_URL=${APP_DOCKER_IMAGE:-http://localhost:8080}'
+      - 'HOST_URL=${HOST_URL:-http://localhost:8080}'
       - 'DB_URL=tarantool'
       - 'DB_PORT=3301'
     depends_on:
