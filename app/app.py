@@ -45,9 +45,10 @@ def get_all_memes():
     memes = meme_repository.get_all_memes()
 
     read_memes = []
+
     for meme in memes:
-        original_file_name = meme.original_image_path.split("\\")[-1]
-        generated_file_name = meme.generated_image_path.split("\\")[-1]
+        original_file_name = meme.original_image_path.split('/' if '/' in meme.original_image_path else '\\')[-1]
+        generated_file_name = meme.generated_image_path.split('/' if '/' in meme.generated_image_path else '\\')[-1]
         read_memes.append(models.GetMeme(id=meme.id,
                                          original_image_url=f'{HOST_URL}/media/{original_file_name}',
                                          generated_image_url=f'{HOST_URL}/media/{generated_file_name}',
@@ -63,8 +64,8 @@ def get_meme(pk):
     if not meme:
         return 'Not found', 404
 
-    original_file_name = meme.original_image_path.split("\\")[-1]
-    generated_file_name = meme.generated_image_path.split("\\")[-1]
+    original_file_name = meme.original_image_path.split('/' if '/' in meme.original_image_path else '\\')[-1]
+    generated_file_name = meme.generated_image_path.split('/' if '/' in meme.generated_image_path else '\\')[-1]
     read_meme = models.GetMeme(id=meme.id,
                                original_image_url=f'{HOST_URL}/media/{original_file_name}',
                                generated_image_url=f'{HOST_URL}/media/{generated_file_name}',
@@ -100,7 +101,7 @@ def create_meme():
     bottom_text = data['bottom_text']
 
     generated_image_path = meme_generator.generate_meme(file_path, top_text=top_text, bottom_text=bottom_text)
-    generated_file_name = generated_image_path.split('\\')[-1]
+    generated_file_name = generated_image_path.split('/' if '/' in generated_image_path else '\\')[-1]
     meme = models.Meme(original_image_path=file_path,
                        generated_image_path=generated_image_path,
                        top_text=top_text,
