@@ -46,3 +46,11 @@ class MemeRepository:
 
         return models.MemeImg(original_image_path=meme.original_image_path,
                               generated_image_path=meme.generated_image_path)
+
+    def get_random_meme_text(self):
+        memes = self.get_all_memes()
+        meme1 = random.choice(memes)
+        meme2 = random.choice(memes)
+
+        return models.MemeText(top_text=meme1.top_text,
+                               bottom_text=meme2.bottom_text)

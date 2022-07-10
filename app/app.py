@@ -98,12 +98,24 @@ def create_meme():
     # если не передали изображение, то берем случайное
     if not form_img:
         meme_img = meme_repository.get_random_meme_img()
+        if not meme_img:
+            return 'В базе нет подходящих изображений. Заполните поле `img` самостоятельно', 400
         original_image_path = meme_img.original_image_path
     else:
         now = datetime.now()
         original_file_name = secure_filename(f'{now.strftime("%Y%m%d%M%S")}_{form_img.filename}')
         original_image_path = os.path.join(app.config['UPLOAD_FOLDER'], original_file_name)
         form_img.save(original_image_path)
+
+    # если не передали текст, то берем рандомный
+    if not top_text or not bottom_text:
+        meme_text = meme_repository.get_random_meme_text()
+        if not meme_text:
+            return 'В базе нет подходящих изображений. ' \
+                   'Заполните поля `top_text` и bottom_text` самостоятельно', 400
+
+        top_text = meme_text.top_text
+        bottom_text = meme_text.bottom_text
 
     generated_image_path = meme_generator.generate_meme(original_image_path, top_text=top_text,
                                                         bottom_text=bottom_text)

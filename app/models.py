@@ -37,3 +37,8 @@ class MemeImg(BaseModel):
     def get_from_db_data(cls, data: list):
         return cls(original_image_path=data[1],
                    generated_image_path=data[2])
+
+
+class MemeText(BaseModel):
+    top_text: str
+    bottom_text: str
