@@ -8,12 +8,10 @@ services:
         max-size: "50M"
         max-file: "2"
     restart: always
-    ports:
-      - '8081:8081'
     environment:
-      - 'HOST_URL=http://localhost:8081'
-      - DB_URL=tarantool
-      - DB_PORT=3301
+      - 'HOST_URL=${APP_DOCKER_IMAGE:-http://localhost:8080}'
+      - 'DB_URL=tarantool'
+      - 'DB_PORT=3301'
     depends_on:
       - tarantool
     volumes:
@@ -25,3 +23,14 @@ services:
       - '3301:3301'
     volumes:
       - ./tarantool_data/:/var/lib/tarantool
+  nginx:
+    build: ./nginx
+    logging:
+      options:
+        max-size: '200M'
+        max-file: '4'
+    restart: always
+    ports:
+      - '8080:80'
+    volumes:
+      - ./app/media:/usr/src/app/media/
