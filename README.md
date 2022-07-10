@@ -24,7 +24,17 @@
     _Ответ_
     ![image](https://user-images.githubusercontent.com/56492378/178145262-c1ea7850-b368-4679-ab8b-d03d7983353e.png)
 
-
+    
+Объект мема
+```
+{
+    "id": int,
+    "top_text": str # текст вверху изображения
+    "bottom_text": str, # текст внизу изображения
+    "original_image_url": str, # ссылка на оригинальное изображение
+    "generated_image_url": str, # ссылка на получившийся мем
+}
+```
 
 ## Запуск проекта
 
