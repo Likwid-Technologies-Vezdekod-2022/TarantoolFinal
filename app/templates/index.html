@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Сокращение ссылок</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container">
+    <div class="content mt-5">
+        <h1>Сокращение ссылок</h1>
+
+        <div class="form">
+            <div class="mb-3">
+                <label for="original_link" class="form-label">Введите ссылку</label>
+                <input type="text" class="form-control" name="original_link" id="original_link">
+            </div>
+            <button onclick="get_short_link()" class="btn btn-primary">Сократить</button>
+        </div>
+
+        <div id="result" class="mt-4" style="visibility: hidden">
+            <h2>Результат</h2>
+            <div>
+                Сокращенная ссылка: <a target="_blank" id="short_link" href=""></a>
+            </div>
+            <div>
+                <img style="max-height: 250px" id="qr_code" src="" alt="QR код сокращенной ссылки">
+            </div>
+        </div>
+
+        <div id="links">
+
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+
+<script>
+    async function get_short_link() {
+
+        let original_link = document.getElementById('original_link').value
+
+        if (!original_link) {
+            return
+        }
+
+        let response = await fetch('/set/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({'original_link': original_link})
+        });
+
+        let result = {'short_link': '', 'qr_code': ''}
+        result = await response.json();
+        console.log(result)
+        let short_link_element = document.getElementById('short_link')
+        short_link_element.setAttribute('href', result.short_link)
+        short_link_element.innerText = result.short_link
+
+        document.getElementById('result').style.visibility = "visible";
+
+        document.getElementById('qr_code').src = `data:image/png;base64,${result.qr_code}`;
+
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        let response = await fetch('/links/');
+        let result = await response.json();
+        console.log(result)
+        let links = document.createElement('div')
+
+        let table_html = `
+                    <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Сокращенная ссылка</th>
+                  <th scope="col">Оригинальная ссылка</th>
+                  <th scope="col">Количество переходов по сокращенной ссылке</th>
+                </tr>
+              </thead>
+              <tbody>`
+
+        result.forEach(function (item, i, arr) {
+            item = JSON.parse(item)
+            table_html += `
+                <tr>
+                  <td>${item.short}</td>
+                  <td>${item.original}</td>
+                  <td>${item.transitions_count_short}</td>
+                </tr>
+            `
+        });
+
+        table_html += `</tbody></table>`
+
+        links.innerHTML = table_html
+
+        document.getElementsByClassName('content')[0].append(links)
+    });
+
+</script>
+
+</body>
+</html>

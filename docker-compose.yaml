@@ -16,6 +16,8 @@ services:
       - DB_PORT=3301
     depends_on:
       - tarantool
+    volumes:
+      - ./app/media/:/usr/src/app/media/
 
   tarantool:
     build: tarantool/

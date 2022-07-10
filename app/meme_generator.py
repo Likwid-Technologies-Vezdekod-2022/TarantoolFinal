@@ -3,10 +3,8 @@ import textwrap
 
 from PIL import Image, ImageDraw, ImageFont
 
-from app import app
 
-
-def generate_meme(image_path, top_text, bottom_text='', font_path='./fonts/impact/impact.ttf', font_size=9,
+def generate_meme(image_path, top_text, bottom_text='', font_path='impact.ttf', font_size=9,
                   stroke_width=5):
     # load image
     im = Image.open(image_path)
@@ -43,6 +41,7 @@ def generate_meme(image_path, top_text, bottom_text='', font_path='./fonts/impac
         y += line_height
 
     # save meme
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'meme-' + im.filename.split('\\')[-1])
+    sep = '/' if '/' in im.filename else '\\'
+    file_path = os.path.join('media', 'meme-' + im.filename.split(sep)[-1])
     im.save(file_path)
     return file_path
