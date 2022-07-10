@@ -21,8 +21,6 @@ services:
 
   tarantool:
     build: tarantool/
-    ports:
-      - '3301:3301'
     volumes:
       - ./tarantool_data/:/var/lib/tarantool
   nginx:
