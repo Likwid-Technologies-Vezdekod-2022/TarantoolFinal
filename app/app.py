@@ -113,7 +113,6 @@ def create_meme():
                                generated_image_url=f'{HOST_URL}/media/{generated_file_name}',
                                top_text=top_text,
                                bottom_text=bottom_text)
-    print('alooooo', read_meme)
     return jsonify(read_meme.dict()), 201
 
 
