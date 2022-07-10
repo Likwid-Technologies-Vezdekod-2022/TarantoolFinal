@@ -17,6 +17,8 @@ HOST_URL = environ.get('HOST_URL')
 DB_URL = environ.get('DB_URL')
 DB_PORT = environ.get('DB_PORT')
 
+print('HOST_URL:', HOST_URL)
+
 if not HOST_URL:
     HOST_URL = 'http://127.0.0.1:5000'
 
