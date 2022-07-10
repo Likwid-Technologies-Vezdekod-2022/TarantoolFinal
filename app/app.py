@@ -61,7 +61,7 @@ def get_all_memes():
                                          top_text=meme.top_text,
                                          bottom_text=meme.bottom_text).dict())
 
-    return json.dumps(read_memes), 200
+    return jsonify(read_memes), 200
 
 
 @app.route('/api/memes/', methods=['POST'])
@@ -100,7 +100,7 @@ def create_meme():
                                top_text=top_text,
                                bottom_text=bottom_text)
 
-    return read_meme.json(), 201
+    return jsonify(read_meme.dict()), 201
 
 
 @app.route('/', methods=['GET'])
