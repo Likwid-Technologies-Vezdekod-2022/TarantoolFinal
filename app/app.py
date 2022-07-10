@@ -79,37 +79,46 @@ def create_meme():
     data = request.form
     files = request.files
 
+    top_text = data.get('top_text')
+    bottom_text = data.get('bottom_text')
+
     errors = []
-    if not data.get('top_text'):
-        errors.append({'top_text': 'обязательное поле'})
-    if not data.get('bottom_text'):
-        errors.append({'bottom_text': 'обязательное поле'})
-    if not files.get('img') or not files['img'].filename:
-        errors.append({'img': 'обязательное поле'})
+    # if (not files.get('img') or not files['img'].filename) and (not top_text and not bottom_text):
+    #     if not top_text or not bottom_text:
+    #         errors.append({'top_text': 'обязательное поле'})
+    #         errors.append({'bottom_text': 'обязательное поле'})
+    #     elif not files.get('img') or not files['img'].filename:
+    #         errors.append({'img': 'обязательное поле'})
+    #
+    # if errors:
+    #     return jsonify(errors), 400
 
-    if errors:
-        return jsonify(errors), 400
+    form_img = files.get('img')
 
-    form_img = files['img']
+    # если не передали изображение, то берем случайное
+    if not form_img:
+        meme_img = meme_repository.get_random_meme_img()
+        original_image_path = meme_img.original_image_path
+    else:
+        now = datetime.now()
+        original_file_name = secure_filename(f'{now.strftime("%Y%m%d%M%S")}_{form_img.filename}')
+        original_image_path = os.path.join(app.config['UPLOAD_FOLDER'], original_file_name)
+        form_img.save(original_image_path)
 
-    now = datetime.now()
-    filename = secure_filename(f'{now.strftime("%Y%m%d%M%S")}_{form_img.filename}')
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    form_img.save(file_path)
+    generated_image_path = meme_generator.generate_meme(original_image_path, top_text=top_text,
+                                                        bottom_text=bottom_text)
 
-    top_text = data['top_text']
-    bottom_text = data['bottom_text']
-
-    generated_image_path = meme_generator.generate_meme(file_path, top_text=top_text, bottom_text=bottom_text)
-    generated_file_name = generated_image_path.split('/' if '/' in generated_image_path else '\\')[-1]
-    meme = models.Meme(original_image_path=file_path,
+    meme = models.Meme(original_image_path=original_image_path,
                        generated_image_path=generated_image_path,
                        top_text=top_text,
                        bottom_text=bottom_text)
 
     meme = meme_repository.create_meme(meme)
+
+    original_file_name = meme.original_image_path.split('/' if '/' in meme.original_image_path else '\\')[-1]
+    generated_file_name = generated_image_path.split('/' if '/' in generated_image_path else '\\')[-1]
     read_meme = models.GetMeme(id=meme.id,
-                               original_image_url=f'{HOST_URL}/media/{filename}',
+                               original_image_url=f'{HOST_URL}/media/{original_file_name}',
                                generated_image_url=f'{HOST_URL}/media/{generated_file_name}',
                                top_text=top_text,
                                bottom_text=bottom_text)

@@ -1,3 +1,4 @@
+import random
 from typing import Union
 
 from tarantool.response import Response
@@ -36,3 +37,12 @@ class MemeRepository:
         r: Response = self.space.insert(instance.get_data_to_save())
         obj = models.Meme.get_from_db_data(r.data[0])
         return obj
+
+    def get_random_meme_img(self) -> Union[models.MemeImg, None]:
+        memes = self.get_all_memes()
+        if not memes:
+            return None
+        meme = random.choice(memes)
+
+        return models.MemeImg(original_image_path=meme.original_image_path,
+                              generated_image_path=meme.generated_image_path)

@@ -27,3 +27,13 @@ class GetMeme(BaseModel):
     generated_image_url: str
     top_text: str
     bottom_text: str
+
+
+class MemeImg(BaseModel):
+    original_image_path: str
+    generated_image_path: str
+
+    @classmethod
+    def get_from_db_data(cls, data: list):
+        return cls(original_image_path=data[1],
+                   generated_image_path=data[2])
