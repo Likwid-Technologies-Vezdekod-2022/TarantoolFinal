@@ -49,6 +49,13 @@
             </div>
         </div>
 
+        <div>
+            <h2>Коллекция мемов</h2>
+            <div id="all_memes">
+
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -73,8 +80,30 @@
 
         document.getElementById('meme_img').src = result.generated_image_url;
 
+        await load_all_memes()
     };
 
+    async function load_all_memes() {
+
+        document.getElementById('all_memes').innerHTML = ""
+
+        let response = await fetch('/api/memes/', {
+            method: 'GET'
+        });
+
+        let result = await response.json();
+        console.log(result)
+        result.forEach(meme => {
+            let meme_el = document.createElement('img')
+            meme_el.style.height = '200px'
+            meme_el.style.margin = '10px'
+
+            meme_el.src = meme.generated_image_url
+            document.getElementById('all_memes').append(meme_el)
+        })
+    }
+
+    load_all_memes()
 
 </script>
 
