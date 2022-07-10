@@ -1,6 +1,9 @@
+import os
 import textwrap
 
 from PIL import Image, ImageDraw, ImageFont
+
+from app import app
 
 
 def generate_meme(image_path, top_text, bottom_text='', font_path='./fonts/impact/impact.ttf', font_size=9,
@@ -40,10 +43,6 @@ def generate_meme(image_path, top_text, bottom_text='', font_path='./fonts/impac
         y += line_height
 
     # save meme
-    im.save('meme-' + im.filename.split('/')[-1])
-
-
-if __name__ == '__main__':
-    top_text = "ахахах"
-    bottom_text = "But when I do, I use Python"
-    generate_meme('./Nf7125AZxbs.jpg', top_text=top_text, bottom_text=bottom_text)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'meme-' + im.filename.split('\\')[-1])
+    im.save(file_path)
+    return file_path

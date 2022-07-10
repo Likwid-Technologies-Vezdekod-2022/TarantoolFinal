@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from werkzeug.datastructures import FileStorage
 
 
 class Meme(BaseModel):
@@ -21,3 +20,10 @@ class Meme(BaseModel):
         return [self.id, self.original_image_path, self.generated_image_path,
                 self.top_text, self.bottom_text]
 
+
+class GetMeme(BaseModel):
+    id: int
+    original_image_url: str
+    generated_image_url: str
+    top_text: str
+    bottom_text: str

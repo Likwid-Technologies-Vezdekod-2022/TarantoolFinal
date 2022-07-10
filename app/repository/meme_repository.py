@@ -10,10 +10,16 @@ class MemeRepository:
         self.store = store
         self.space: Space = self.store.get_space('meme')
 
-    def get_all_memes(self) -> list[models.Meme]:
+    def get_all_memes(self, to_dict=False) -> list[models.Meme]:
+        """
+
+        :rtype: object
+        """
         data = list(self.space.select())
-        data = [models.Meme.get_from_db_data(obj) for obj in data]
-        print(data)
+        if to_dict:
+            data = [models.Meme.get_from_db_data(obj).dict() for obj in data]
+        else:
+            data = [models.Meme.get_from_db_data(obj) for obj in data]
         return data
 
     def create_meme(self, instance: models.Meme) -> models.Meme:
